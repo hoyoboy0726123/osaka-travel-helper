@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🇯🇵 2026 大阪親子 7天6夜 行程表</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e74c3c;
+            --secondary: #3498db;
+            --bg: #f5f5f5;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --accent: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary), #c0392b);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .day-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .day-header {
+            background: linear-gradient(135deg, var(--secondary), #2980b9);
+            color: white;
+            padding: 1rem 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .day-header.usj {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+        
+        .day-header.snow {
+            background: linear-gradient(135deg, #1abc9c, #16a085);
+        }
+        
+        .day-header.sunny {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+        
+        .day-header h2 {
+            font-size: 1.1rem;
+        }
+        
+        .weather-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .day-content {
+            padding: 1rem 1.2rem;
+        }
+        
+        .schedule-item {
+            display: flex;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+        
+        .time {
+            min-width: 60px;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        
+        .activity {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+        
+        .activity-title a {
+            color: var(--text);
+            text-decoration: none;
+        }
+        
+        .activity-title a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+        
+        .meal-tag {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-right: 0.3rem;
+            font-weight: 500;
+        }
+        
+        .meal-tag.breakfast { background: #ffeaa7; color: #6c5c00; }
+        .meal-tag.lunch { background: #81ecec; color: #00675b; }
+        .meal-tag.dinner { background: #fd79a8; color: #6d1a36; }
+        .meal-tag.snack { background: #a29bfe; color: #3d3769; }
+        .meal-tag.attraction { background: #74b9ff; color: #0a4a7a; }
+        .meal-tag.shopping { background: #55efc4; color: #006a4e; }
+        
+        .map-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+        
+        .map-link:hover {
+            text-decoration: underline;
+        }
+        
+        .reminder-box {
+            background: #fff3cd;
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .reminder-box h3 {
+            color: #856404;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .reminder-box ul {
+            margin-left: 1.2rem;
+            color: #856404;
+            font-size: 0.9rem;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        .toggle-icon {
+            transition: transform 0.3s;
+        }
+        
+        .day-card.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+        
+        .day-card.collapsed .day-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🇯🇵 2026 大阪親子 7天6夜</h1>
+        <p>2/9 (一) ~ 2/15 (日) ・ USJ 1天版</p>
+    </div>
+    
+    <div class="container">
+        
+        <!-- Day 1 -->
+        <div class="day-card">
+            <div class="day-header" onclick="toggleDay(this)">
+                <h2>Day 1｜2/9（一）抵達大阪</h2>
+                <span class="weather-badge">☁️ 多雲 2%</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="schedule-item">
+                    <span class="time">12:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🏨 住宿</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=心齋橋+長堀橋+民宿" target="_blank">抵達民宿（心齋橋/長堀橋）寄放行李</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=心齋橋站" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">12:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag lunch">🍜 午餐</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=一蘭拉麵+道頓堀" target="_blank">一蘭拉麵 / 金龍拉麵</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=一蘭拉麵+道頓堀本店" target="_blank">📍 一蘭導航</a>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=金龍拉麵+道頓堀" target="_blank">📍 金龍導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">14:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag shopping">🛍️ 購物</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=心齋橋筋商店街" target="_blank">心齋橋筋逛街、道頓堀散步</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=心齋橋筋商店街" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">15:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag snack">🍡 點心</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Pablo+心齋橋" target="_blank">Pablo 半熟起司塔 / りくろーおじさん 起司蛋糕</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Pablo+心齋橋店" target="_blank">📍 Pablo 導航</a>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=りくろーおじさん+なんば本店" target="_blank">📍 老爺爺蛋糕導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">17:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🎯 景點</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=大丸百貨+心齋橋店" target="_blank">大丸百貨 9F（哆啦A夢未來百貨、Pokemon Center）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=大丸百貨+心齋橋店" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">19:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag dinner">🍖 晚餐</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=燒肉力丸+道頓堀" target="_blank">道頓堀燒肉力丸 / 串炸達摩</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=燒肉力丸+道頓堀" target="_blank">📍 力丸導航</a>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=串炸達摩+道頓堀" target="_blank">📍 串炸達摩導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">20:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag snack">🍨 宵夜</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Glico跑跑人+道頓堀" target="_blank">Glico 跑跑人打卡、章魚燒</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Glico看板+道頓堀" target="_blank">📍 Glico 導航</a>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=たこ焼き+道頓堀" target="_blank">📍 章魚燒導航</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 2 -->
+        <div class="day-card">
+            <div class="day-header usj" onclick="toggleDay(this)">
+                <h2>Day 2｜2/10（二）🎢 USJ 環球影城</h2>
+                <span class="weather-badge">🌧️ 55% ⚠️</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="reminder-box">
+                    <h3>⚠️ 重要提醒</h3>
+                    <ul>
+                        <li>帶雨衣！優先玩室內設施</li>
+                        <li>早點出門排隊搶入園</li>
+                    </ul>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">07:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag breakfast">🍙 早餐</span>
+                            便利商店飯糰 + 咖啡（快速出門）
+                        </div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">08:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🎢 景點</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=日本環球影城" target="_blank">抵達 USJ 門口排隊</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">09:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🎮 必玩</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Super+Nintendo+World+USJ" target="_blank">開園直衝 任天堂世界</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Super+Nintendo+World+USJ" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">12:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag lunch">🍔 午餐</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Kinopio+Cafe+USJ" target="_blank">奇諾比奧咖啡廳 / 三根掃帚</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Kinopio+Cafe+USJ" target="_blank">📍 奇諾比奧導航</a>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Three+Broomsticks+USJ" target="_blank">📍 三根掃帚導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">13:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🎢 遊樂設施</span>
+                            繼續玩大設施（哈利波特、小小兵、侏羅紀）
+                        </div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">15:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag snack">🍦 點心</span>
+                            奶油啤酒 / 爆米花桶
+                        </div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">18:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🎆 夜間</span>
+                            夜間遊行 & 夜景
+                        </div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">19:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag dinner">🍝 晚餐</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Universal+CityWalk+Osaka" target="_blank">CityWalk 美食街</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Universal+CityWalk+Osaka" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 3 -->
+        <div class="day-card">
+            <div class="day-header snow" onclick="toggleDay(this)">
+                <h2>Day 3｜2/11（三）⛷️ 郊區玩雪</h2>
+                <span class="weather-badge">⛅ 49% 國定假日</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="reminder-box">
+                    <h3>🔥 重要提醒</h3>
+                    <ul>
+                        <li>國定假日，燒肉務必提前預約！</li>
+                    </ul>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">08:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag breakfast">🥐 早餐</span>
+                            民宿附近咖啡廳 / 便利商店
+                        </div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">09:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🚃 交通</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=枚方公園站" target="_blank">搭京阪電車前往枚方</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=枚方公園站" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">10:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">⛷️ 景點</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=枚方公園+Hirakata+Park" target="_blank">枚方公園 Winter Carnival 玩雪/溜冰</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=ひらかたパーク" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">12:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag lunch">🍱 午餐</span>
+                            枚方公園內餐廳
+                        </div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">16:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🚶 移動</span>
+                            離開枚方公園
+                        </div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">17:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag shopping">📚 購物</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=枚方T-SITE" target="_blank">枚方 T-SITE（7米書牆打卡）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=枚方T-SITE" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">17:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag snack">☕ 下午茶</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Starbucks+枚方T-SITE" target="_blank">T-SITE 星巴克</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Starbucks+枚方T-SITE" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">19:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🚃 交通</span>
+                            回市區
+                        </div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">19:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag dinner">🔥 晚餐</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=燒肉力丸+大阪" target="_blank">燒肉力丸（⚠️ 務必預約）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=焼肉+力丸+心斎橋" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 4 -->
+        <div class="day-card">
+            <div class="day-header sunny" onclick="toggleDay(this)">
+                <h2>Day 4｜2/12（四）🌊 海灣一日遊</h2>
+                <span class="weather-badge">☀️ 晴朗 1% ✨</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="reminder-box">
+                    <h3>📝 重要提醒</h3>
+                    <ul>
+                        <li>樂高樂園需預約！</li>
+                        <li>今日使用大阪周遊卡 Day 1</li>
+                    </ul>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">08:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag breakfast">🥪 早餐</span>
+                            民宿附近早餐店
+                        </div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">09:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🚃 交通</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=大阪港站" target="_blank">搭地鐵前往大阪港</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=大阪港站" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">10:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🧱 景點</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=LEGOLAND+Discovery+Center+Osaka" target="_blank">大阪樂高樂園（✅ 需預約上午場）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=レゴランド・ディスカバリー・センター大阪" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">12:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag lunch">🍜 午餐</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=天保山Marketplace" target="_blank">天保山 Market Place 美食街</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=天保山マーケットプレース" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">14:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🐠 景點</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=海遊館+大阪" target="_blank">海遊館（門票自費）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=海遊館" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">16:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">⛵ 景點</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=聖瑪麗亞號+大阪" target="_blank">聖瑪麗亞號觀光船（周遊卡免費）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=サンタマリア+天保山" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">17:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🎡 景點</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=天保山大摩天輪" target="_blank">天保山大摩天輪（周遊卡免費，看夕陽）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=天保山大観覧車" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">18:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag dinner">🍣 晚餐</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=魚心壽司+心齋橋" target="_blank">回心齋橋吃壽司（魚心 / 春駒）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=魚心+心斎橋" target="_blank">📍 魚心導航</a>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=春駒+心斎橋" target="_blank">📍 春駒導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">20:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag snack">🍨 宵夜</span>
+                            道頓堀甜點散步
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 5 -->
+        <div class="day-card">
+            <div class="day-header sunny" onclick="toggleDay(this)">
+                <h2>Day 5｜2/13（五）🕵️ 柯南 & 夜景</h2>
+                <span class="weather-badge">☀️ 晴朗 0% ✨</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="reminder-box">
+                    <h3>📝 今日重點</h3>
+                    <ul>
+                        <li>今日使用大阪周遊卡 Day 2</li>
+                        <li>Harukas 展望台看日落夜景！</li>
+                    </ul>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">08:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag breakfast">🥞 早餐</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=gram+鬆餅+心齋橋" target="_blank">gram 鬆餅（心齋橋店）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=gram+心斎橋" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">09:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🕵️ 景點</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=讀賣電視台+柯南+大阪" target="_blank">讀賣電視台 YTV（柯南雕像巡禮）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=読売テレビ+コナン像" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">11:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🦁 景點</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=天王寺動物園" target="_blank">天王寺動物園（周遊卡免費）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=天王寺動物園" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">13:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag lunch">🍛 午餐</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=天王寺MIO" target="_blank">天王寺 MIO / Q's Mall 美食街</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=天王寺ミオ" target="_blank">📍 MIO 導航</a>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=あべのキューズモール" target="_blank">📍 Q's Mall 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">15:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag snack">☕ 下午茶</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=阿倍野Harukas+咖啡" target="_blank">阿倍野 Harukas 內咖啡廳</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=あべのハルカス" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">16:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🌆 景點</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=阿倍野Harukas+300展望台" target="_blank">阿倍野 Harukas 300 展望台（日落→夜景）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=ハルカス300展望台" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">18:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🚃 移動</span>
+                            回道頓堀
+                        </div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">19:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🚤 景點</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=道頓堀水上觀光船" target="_blank">道頓堀水上觀光船（周遊卡免費）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=とんぼりリバークルーズ" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">20:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag dinner">🍜 晚餐</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=四天王拉麵+道頓堀" target="_blank">四天王拉麵 / 神座拉麵</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=四天王ラーメン+道頓堀" target="_blank">📍 四天王導航</a>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=神座+道頓堀" target="_blank">📍 神座導航</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 6 -->
+        <div class="day-card">
+            <div class="day-header" onclick="toggleDay(this)">
+                <h2>Day 6｜2/14（六）🗼 通天閣 & 補貨</h2>
+                <span class="weather-badge">⛅ 13%</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="schedule-item">
+                    <span class="time">09:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag breakfast">🥯 早餐</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=黑門市場" target="_blank">黑門市場（海鮮丼、和牛串）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=黒門市場" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">11:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag shopping">🎮 購物</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=日本橋電器街+大阪" target="_blank">日本橋電器街（動漫、轉蛋、模型）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=日本橋でんでんタウン" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">13:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag lunch">🍜 午餐</span>
+                            日本橋周邊（咖哩飯 / 定食）
+                        </div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">14:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🚶 移動</span>
+                            移動到新世界
+                        </div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">15:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🗼 景點</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=通天閣" target="_blank">通天閣（Tower Slider 溜滑梯，自費）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=通天閣" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">16:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag snack">🍢 點心</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=八重勝+新世界" target="_blank">新世界串炸（八重勝 / 橫綱）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=八重勝+新世界" target="_blank">📍 八重勝導航</a>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=串炸橫綱+新世界" target="_blank">📍 橫綱導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">18:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag shopping">🛍️ 購物</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=心齋橋筋商店街" target="_blank">回心齋橋最後補貨</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=心斎橋筋商店街" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">19:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag dinner">🍖 晚餐</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=燒肉+心齋橋" target="_blank">最後一餐大餐（燒肉 / 河豚）</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=玄品ふぐ+心斎橋" target="_blank">📍 河豚導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">21:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🧳 準備</span>
+                            收拾行李
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day 7 -->
+        <div class="day-card">
+            <div class="day-header" onclick="toggleDay(this)">
+                <h2>Day 7｜2/15（日）✈️ 回程日</h2>
+                <span class="weather-badge">☁️ 25%</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="schedule-item">
+                    <span class="time">08:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag breakfast">🥐 早餐</span>
+                            便利商店 / 民宿附近
+                        </div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">09:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">🧳 移動</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=臨空城+Rinku+Town" target="_blank">退房，搭車前往臨空城</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=りんくうタウン駅" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">11:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag shopping">🛍️ 購物</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Rinku+Premium+Outlets" target="_blank">Rinku Premium Outlets 購物</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=りんくうプレミアム・アウトレット" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">12:30</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag lunch">🍔 午餐</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Rinku+Premium+Outlets+美食" target="_blank">Outlet 美食街</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=りんくうプレミアム・アウトレット+フードコート" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <span class="time">15:00</span>
+                    <div class="activity">
+                        <div class="activity-title">
+                            <span class="meal-tag attraction">✈️ 機場</span>
+                            <a href="https://www.google.com/maps/search/?api=1&query=關西國際機場" target="_blank">前往關西機場，回台灣！</a>
+                        </div>
+                        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=関西国際空港" target="_blank">📍 導航</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 重要提醒 -->
+        <div class="day-card">
+            <div class="day-header" style="background: linear-gradient(135deg, #e74c3c, #c0392b);" onclick="toggleDay(this)">
+                <h2>📋 重要提醒清單</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="day-content">
+                <div class="reminder-box" style="background: #ffe6e6; border-color: #e74c3c;">
+                    <h3 style="color: #c0392b;">⚠️ 必做事項</h3>
+                    <ul style="color: #c0392b;">
+                        <li><strong>2/8 前</strong>：填寫 <a href="https://www.vjw.digital.go.jp/" target="_blank">Visit Japan Web</a></li>
+                        <li><strong>2/10</strong>：帶雨衣！USJ 優先室內設施</li>
+                        <li><strong>2/11</strong>：燒肉預約（國定假日）</li>
+                        <li><strong>2/12</strong>：樂高樂園預約</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>🤖 由賈維斯製作 | 最後更新：2026/02/02</p>
+        <p>祝旅途愉快！🇯🇵✨</p>
+    </div>
+
+    <script>
+        function toggleDay(header) {
+            const card = header.parentElement;
+            card.classList.toggle('collapsed');
+        }
+    </script>
+</body>
+</html>
