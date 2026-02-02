@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天氣查詢</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        button {
+            padding: 15px 30px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            background: #ee5a5a;
+            transform: scale(1.05);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .weather-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: none;
+        }
+
+        .weather-card.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .current-weather {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .city-name {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .temperature {
+            font-size: 4rem;
+            font-weight: 300;
+            color: #667eea;
+        }
+
+        .weather-icon {
+            font-size: 3rem;
+            margin: 10px 0;
+        }
+
+        .weather-desc {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            text-align: center;
+        }
+
+        .detail-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .forecast {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .forecast h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .forecast-list {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .forecast-item {
+            flex: 0 0 auto;
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            min-width: 80px;
+        }
+
+        .forecast-day {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .forecast-icon {
+            font-size: 1.5rem;
+            margin: 5px 0;
+        }
+
+        .forecast-temp {
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .error {
+            background: #ffe0e0;
+            color: #c00;
+            padding: 15px 20px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .loading::after {
+            content: '';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌤️ 天氣查詢</h1>
+        
+        <div class="search-box">
+            <input type="text" id="cityInput" placeholder="輸入城市名稱 (例如: Tokyo, Osaka, Taipei)" 
+                   onkeypress="if(event.key==='Enter') searchWeather()">
+            <button onclick="searchWeather()" id="searchBtn">查詢</button>
+        </div>
+
+        <div class="loading" id="loading">正在查詢天氣</div>
+        <div class="error" id="error"></div>
+
+        <div class="weather-card" id="weatherCard">
+            <div class="current-weather">
+                <div class="city-name" id="cityName"></div>
+                <div class="weather-icon" id="weatherIcon"></div>
+                <div class="temperature" id="temperature"></div>
+                <div class="weather-desc" id="weatherDesc"></div>
+            </div>
+
+            <div class="details">
+                <div class="detail-item">
+                    <div class="detail-label">體感溫度</div>
+                    <div class="detail-value" id="feelsLike"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">濕度</div>
+                    <div class="detail-value" id="humidity"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">風速</div>
+                    <div class="detail-value" id="windSpeed"></div>
+                </div>
+            </div>
+
+            <div class="forecast">
+                <h3>📅 未來 7 天預報</h3>
+                <div class="forecast-list" id="forecastList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Weather code to emoji mapping
+        const weatherCodeToEmoji = {
+            0: '☀️',   // Clear sky
+            1: '🌤️',  // Mainly clear
+            2: '⛅',   // Partly cloudy
+            3: '☁️',   // Overcast
+            45: '🌫️', // Fog
+            48: '🌫️', // Depositing rime fog
+            51: '🌧️', // Drizzle light
+            53: '🌧️', // Drizzle moderate
+            55: '🌧️', // Drizzle dense
+            61: '🌧️', // Rain slight
+            63: '🌧️', // Rain moderate
+            65: '🌧️', // Rain heavy
+            71: '🌨️', // Snow slight
+            73: '🌨️', // Snow moderate
+            75: '❄️',  // Snow heavy
+            77: '🌨️', // Snow grains
+            80: '🌧️', // Rain showers slight
+            81: '🌧️', // Rain showers moderate
+            82: '⛈️', // Rain showers violent
+            85: '🌨️', // Snow showers slight
+            86: '🌨️', // Snow showers heavy
+            95: '⛈️', // Thunderstorm
+            96: '⛈️', // Thunderstorm with hail
+            99: '⛈️', // Thunderstorm with heavy hail
+        };
+
+        const weatherCodeToDesc = {
+            0: '晴朗',
+            1: '大致晴朗',
+            2: '多雲',
+            3: '陰天',
+            45: '霧',
+            48: '霧',
+            51: '毛毛雨',
+            53: '毛毛雨',
+            55: '毛毛雨',
+            61: '小雨',
+            63: '中雨',
+            65: '大雨',
+            71: '小雪',
+            73: '中雪',
+            75: '大雪',
+            77: '雪粒',
+            80: '陣雨',
+            81: '陣雨',
+            82: '暴雨',
+            85: '陣雪',
+            86: '大陣雪',
+            95: '雷雨',
+            96: '冰雹雷雨',
+            99: '強冰雹雷雨',
+        };
+
+        const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
+
+        async function searchWeather() {
+            const cityInput = document.getElementById('cityInput');
+            const city = cityInput.value.trim();
+            
+            if (!city) {
+                showError('請輸入城市名稱');
+                return;
+            }
+
+            const searchBtn = document.getElementById('searchBtn');
+            const loading = document.getElementById('loading');
+            const weatherCard = document.getElementById('weatherCard');
+            const error = document.getElementById('error');
+
+            searchBtn.disabled = true;
+            loading.classList.add('show');
+            weatherCard.classList.remove('show');
+            error.classList.remove('show');
+
+            try {
+                // First, geocode the city name
+                const geoResponse = await fetch(
+                    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=zh`
+                );
+                const geoData = await geoResponse.json();
+
+                if (!geoData.results || geoData.results.length === 0) {
+                    throw new Error('找不到該城市，請確認城市名稱');
+                }
+
+                const location = geoData.results[0];
+                const { latitude, longitude, name, country } = location;
+
+                // Then fetch weather data
+                const weatherResponse = await fetch(
+                    `https://api.open-meteo.com/v1/forecast?` +
+                    `latitude=${latitude}&longitude=${longitude}` +
+                    `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m` +
+                    `&daily=weather_code,temperature_2m_max,temperature_2m_min` +
+                    `&timezone=auto&forecast_days=7`
+                );
+                const weatherData = await weatherResponse.json();
+
+                displayWeather(name, country, weatherData);
+
+            } catch (err) {
+                showError(err.message || '查詢失敗，請稍後再試');
+            } finally {
+                searchBtn.disabled = false;
+                loading.classList.remove('show');
+            }
+        }
+
+        function displayWeather(cityName, country, data) {
+            const current = data.current;
+            const daily = data.daily;
+
+            // Current weather
+            document.getElementById('cityName').textContent = `${cityName}, ${country}`;
+            document.getElementById('weatherIcon').textContent = weatherCodeToEmoji[current.weather_code] || '🌡️';
+            document.getElementById('temperature').textContent = `${Math.round(current.temperature_2m)}°C`;
+            document.getElementById('weatherDesc').textContent = weatherCodeToDesc[current.weather_code] || '未知';
+            document.getElementById('feelsLike').textContent = `${Math.round(current.apparent_temperature)}°C`;
+            document.getElementById('humidity').textContent = `${current.relative_humidity_2m}%`;
+            document.getElementById('windSpeed').textContent = `${current.wind_speed_10m} km/h`;
+
+            // Forecast
+            const forecastList = document.getElementById('forecastList');
+            forecastList.innerHTML = '';
+
+            for (let i = 0; i < daily.time.length; i++) {
+                const date = new Date(daily.time[i]);
+                const dayName = i === 0 ? '今天' : `週${dayNames[date.getDay()]}`;
+                
+                const item = document.createElement('div');
+                item.className = 'forecast-item';
+                item.innerHTML = `
+                    <div class="forecast-day">${dayName}</div>
+                    <div class="forecast-icon">${weatherCodeToEmoji[daily.weather_code[i]] || '🌡️'}</div>
+                    <div class="forecast-temp">${Math.round(daily.temperature_2m_max[i])}° / ${Math.round(daily.temperature_2m_min[i])}°</div>
+                `;
+                forecastList.appendChild(item);
+            }
+
+            document.getElementById('weatherCard').classList.add('show');
+        }
+
+        function showError(message) {
+            const error = document.getElementById('error');
+            error.textContent = message;
+            error.classList.add('show');
+        }
+
+        // Auto-focus on input
+        document.getElementById('cityInput').focus();
+    </script>
+</body>
+</html>
